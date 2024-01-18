@@ -46,7 +46,7 @@ class Facebook(SocialPlatform):
         
 
     def delete_post(self, post_id):
-        ret = self.api.delete_object(object_id=post_id,connection="feed")
+        ret = self.api.delete_object(object_id=post_id)
         if ret.get("success", False):
             print(f"Post [{post_id}] deleted successfully")
             return True
