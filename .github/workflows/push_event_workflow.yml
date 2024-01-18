@@ -20,7 +20,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: replace credentials with secrets
+      run: |
+        sed -i 's/access_token = ".*"/access_token = "${{ secrets.ACCESS_TOKEN }}"/g' creds.py
+        sed -i 's/facebook_page_id = ".*"/facebook_page_id = "${{ secrets.FACEBOOK_PAGE_ID }}"/g' creds.py
+        sed -i 's/app_id = ".*"/app_id = "${{ secrets.APP_ID }}"/g' creds.py
+        sed -i 's/app_secret = ".*"/app_secret = "${{ secrets.APP_SECRET }}"/g' creds.py
 
     - name : Run tests 
       run :  
         python -m unittest discover  -v 
+
+    
