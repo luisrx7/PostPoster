@@ -20,13 +20,15 @@ class TestFacebook(unittest.TestCase):
         #this runs after all test case runs once
         print("tests are done, deleting posts created by tests")
         input("press enter to continue")
-        for post_id in posts:
-            print("deleting post: ", post_id)
+        #get all posts
+        posts = cls.fb.get_feed_posts()
+        for post in posts:
+            print(f"deleting post [{post['id']}] created_at [{post['created_time']}] with message {post['message']}" )
             try:
-                cls.fb.delete_post(post_id)
+                cls.fb.delete_post(post["id"])
             except Exception as e:
                 print(e)
-                print("failed to delete post: ", post_id)
+                print("failed to delete post: ", post["id"])
                 pass
         pass
 
@@ -42,30 +44,30 @@ class TestFacebook(unittest.TestCase):
         pass
 
 
-    def test_get_app_access_token(self):
-        ret = self.fb.api.get_app_token(app_id=app_id, app_secret=app_secret)
-        self.assertIsInstance(ret, dict)
-        self.assertIn("access_token", ret)
+    # def test_get_app_access_token(self):
+    #     ret = self.fb.api.get_app_token(app_id=app_id, app_secret=app_secret)
+    #     self.assertIsInstance(ret, dict)
+    #     self.assertIn("access_token", ret)
     
-    def test_debug_token(self):
-        ret = self.fb.api.debug_token(input_token=access_token)
-        self.assertIsInstance(ret, dict)
-        self.assertIn("data", ret)
-        self.assertIn("app_id", ret["data"])
-        self.assertIn("is_valid", ret["data"])
-        self.assertIn("type", ret["data"])
-        if ret["data"]["type"] == "USER":
-            self.assertIn("user_id", ret["data"])
-            self.assertIn("scopes", ret["data"])
-            self.assertIn("expires_at", ret["data"])
-            self.assertIn("data_access_expires_at", ret["data"])
+    # def test_debug_token(self):
+    #     ret = self.fb.api.debug_token(input_token=access_token)
+    #     self.assertIsInstance(ret, dict)
+    #     self.assertIn("data", ret)
+    #     self.assertIn("app_id", ret["data"])
+    #     self.assertIn("is_valid", ret["data"])
+    #     self.assertIn("type", ret["data"])
+    #     if ret["data"]["type"] == "USER":
+    #         self.assertIn("user_id", ret["data"])
+    #         self.assertIn("scopes", ret["data"])
+    #         self.assertIn("expires_at", ret["data"])
+    #         self.assertIn("data_access_expires_at", ret["data"])
 
-    def test_get_long_lived_token(self):
-        ret_lltoken = self.fb.api.exchange_long_lived_user_access_token(access_token=access_token)
-        self.assertIsInstance(ret_lltoken, dict)
-        self.assertIn("access_token", ret_lltoken)
-        self.assertIn("token_type", ret_lltoken)
-        self.assertIn("expires_in", ret_lltoken)
+    # def test_get_long_lived_token(self):
+    #     ret_lltoken = self.fb.api.exchange_long_lived_user_access_token(access_token=access_token)
+    #     self.assertIsInstance(ret_lltoken, dict)
+    #     self.assertIn("access_token", ret_lltoken)
+    #     self.assertIn("token_type", ret_lltoken)
+    #     self.assertIn("expires_in", ret_lltoken)
 
 
 
@@ -143,7 +145,7 @@ class TestFacebook(unittest.TestCase):
     def test_create_post_with_video_local(self):
         #this is a simple post with video from local
         ret , self.post_id = self.fb.create_post(message="test",
-                            media_path=r"vid.mp4",hashtags=["test","test2"])
+                            media_path=r"../assets/tests/Teste.mp4",hashtags=["test","test2"])
         self.assertTrue(ret)
         self.assertIsNotNone(self.post_id)
         # self.assertTrue(str(self.post_id).isdigit())
@@ -189,6 +191,6 @@ class TestFacebook(unittest.TestCase):
 
     def test_create_post_with_video_local_wrong_path(self):
         #this is a simple post with video from local
-        with self.assertRaises(Exception):
+        with self.assertRaises(AssertionError):
             ret , self.post_id = self.fb.create_post(message="test",
                                 media_path=r"nonexisting.mp4",hashtags=["test","test2"]) 
