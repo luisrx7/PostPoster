@@ -194,3 +194,7 @@ class TestFacebook(unittest.TestCase):
         with self.assertRaises(AssertionError):
             ret , self.post_id = self.fb.create_post(message="test",
                                 media_path=r"nonexisting.mp4",hashtags=["test","test2"]) 
+            
+
+if __name__ == '__main__':
+    unittest.main()
