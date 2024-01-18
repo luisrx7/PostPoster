@@ -145,7 +145,7 @@ class TestFacebook(unittest.TestCase):
     def test_create_post_with_video_local(self):
         #this is a simple post with video from local
         ret , self.post_id = self.fb.create_post(message="test",
-                            media_path=r"../assets/tests/Teste.mp4",hashtags=["test","test2"])
+                            media_path=r"assets/tests/Teste.mp4",hashtags=["test","test2"])
         self.assertTrue(ret)
         self.assertIsNotNone(self.post_id)
         # self.assertTrue(str(self.post_id).isdigit())
