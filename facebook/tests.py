@@ -135,6 +135,13 @@ class TestFacebook(unittest.TestCase):
                             media_path="https://pbs.twimg.com/profile_images/1359643195932557315/s9A68JRK_400x400.jpg",hashtags=["test"])
         self.assertTrue(ret)
         self.assertIsNotNone(self.post_id)
+    
+    def test_create_post_with_photo_local(self):
+        #this is a post with photo from local file 
+        ret , self.post_id = self.fb.create_post(message="test",
+                            media_path=r"assets/tests/test.png",hashtags=["test","test2"])
+        self.assertTrue(ret)
+        self.assertIsNotNone(self.post_id)
 
 
     def test_create_post_with_photo_wrong_url(self):

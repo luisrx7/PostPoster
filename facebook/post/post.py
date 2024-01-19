@@ -2,13 +2,14 @@
 #a post is a generic post that can be either a photo or a video post on a feed page
 
 class Post:
-    def __init__(self,message:str = "", media_path:str = "", scheduled_publish_time:int = 0, hashtags:list = [], link:str = ""):
+    def __init__(self,message:str = "", media_path:str = "", scheduled_publish_time:int = 0, hashtags:list = [], link:str = "",published:bool = True):
         self.message = message
         self.hashtags = hashtags
         self.link = link
         self.media_path = media_path
         self.schedule_publish_time = scheduled_publish_time
         self.hashtags = hashtags
+        self.published = published
 
 
 

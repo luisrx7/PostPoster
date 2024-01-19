@@ -4,8 +4,8 @@ from facebook.post.post import Post
 import json
 import os
 class Video_post(Post):
-    def __init__(self,message:str = "", media_path:str = "", scheduled_publish_time:int = 0, hashtags:list = [], link:str = ""):
-        super().__init__(message=message, media_path=media_path, scheduled_publish_time=scheduled_publish_time, hashtags=hashtags, link=link)
+    def __init__(self,message:str = "", media_path:str = "", scheduled_publish_time:int = 0, hashtags:list = [], link:str = "",published:bool = True):
+        super().__init__(message=message, media_path=media_path, scheduled_publish_time=scheduled_publish_time, hashtags=hashtags, link=link, published=published)
 
 
     def publish(self,api,page_id):
