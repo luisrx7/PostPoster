@@ -19,7 +19,7 @@ class TestFacebook(unittest.TestCase):
     def tearDownClass(cls):
         #this runs after all test case runs once
         print("tests are done, deleting posts created by tests")
-        input("press enter to continue")
+        time.sleep(10)
         #get all posts
         posts = cls.fb.get_feed_posts()
         for post in posts:
@@ -44,6 +44,8 @@ class TestFacebook(unittest.TestCase):
         pass
 
 
+    ######## TOKENS TESTS ########
+
     # def test_get_app_access_token(self):
     #     ret = self.fb.api.get_app_token(app_id=app_id, app_secret=app_secret)
     #     self.assertIsInstance(ret, dict)
@@ -62,39 +64,39 @@ class TestFacebook(unittest.TestCase):
     #         self.assertIn("expires_at", ret["data"])
     #         self.assertIn("data_access_expires_at", ret["data"])
 
-    # def test_get_long_lived_token(self):
+    # def test_get_long_lived_user_token(self):
     #     ret_lltoken = self.fb.api.exchange_long_lived_user_access_token(access_token=access_token)
     #     self.assertIsInstance(ret_lltoken, dict)
     #     self.assertIn("access_token", ret_lltoken)
     #     self.assertIn("token_type", ret_lltoken)
     #     self.assertIn("expires_in", ret_lltoken)
 
+    # def test_get_long_lived_page_token(self):
+    #     ret_lltoken = self.fb.api.exchange_long_lived_page_access_token(access_token=access_token, user_id="7279462315438168")
+    #     self.assertIsInstance(ret_lltoken, dict)
+    #     self.assertIn("access_token", ret_lltoken)
+    #     self.assertIn("id", ret_lltoken)
+    #     self.assertIn("category", ret_lltoken)
+    #     self.assertIn("category_list", ret_lltoken)
+    #     self.assertIn("name", ret_lltoken)
 
 
-    def test_delete_post(self):
-        #this is a simple post without media
-        ret , self.post_id = self.fb.create_post(message="Hello World")
-        self.assertTrue(ret)
-        self.assertIsNotNone(self.post_id)
-        # self.assertTrue(str(self.post_id).isdigit())
-        #check if self.post_id contains only numbers
-        ret = self.fb.delete_post(self.post_id)
-        self.assertTrue(ret)
+
+
 
     def test_create_simple_post(self):
         #this is a simple post without media
         ret , self.post_id = self.fb.create_post(message="Hello World")
         self.assertTrue(ret)
         self.assertIsNotNone(self.post_id)
-        # self.assertTrue(str(self.post_id).isdigit())
+
+    ######## SCHEDULED POSTS ########
 
     def test_create_simple_post_scheduled(self):
         #this is a simple post without media scheduled
         ret , self.post_id = self.fb.create_post(message="Hello World scheduled",scheduled_publish_time=int(time.time()+600))
         self.assertTrue(ret)
         self.assertIsNotNone(self.post_id)
-        # self.assertTrue(str(self.post_id).isdigit())
-
 
     def test_create_simple_post_scheduled_in_past(self):
         #this is a simple post without media scheduled in the past
@@ -111,28 +113,28 @@ class TestFacebook(unittest.TestCase):
         with self.assertRaises(AssertionError):
             ret , self.post_id = self.fb.create_post(message="Hello World scheduled to less than 10 minutes",scheduled_publish_time=int(time.time()+9*60))
 
+    ######## LINK IN POST ########
 
     def test_create_simple_post_with_link(self):
         #this is a simple post without media
         ret , self.post_id = self.fb.create_post(message="Hello World with link",link="https://www.google.com")
         self.assertTrue(ret)
         self.assertIsNotNone(self.post_id)
-        # self.assertTrue(str(self.post_id).isdigit())
-
-
 
     def test_create_post_without_message(self):
         #this is a simple post without media
         with self.assertRaises(Exception):
             ret , self.post_id = self.fb.create_post()
         
+
+    ######## PHOTOS IN POST ########
+    
     def test_create_post_with_photo(self):
         #this is a simple post with photo from url
         ret , self.post_id = self.fb.create_post(message="test",
                             media_path="https://pbs.twimg.com/profile_images/1359643195932557315/s9A68JRK_400x400.jpg",hashtags=["test"])
         self.assertTrue(ret)
         self.assertIsNotNone(self.post_id)
-        # self.assertTrue(str(self.post_id).isdigit())
 
 
     def test_create_post_with_photo_wrong_url(self):
@@ -142,19 +144,28 @@ class TestFacebook(unittest.TestCase):
                             media_path="https://p557315/s9A68JRK_400x400.jp",hashtags=["test","test2"])
 
 
+    ######## VIDEOS IN POST ########
+
     def test_create_post_with_video_local(self):
         #this is a simple post with video from local
         ret , self.post_id = self.fb.create_post(message="test",
                             media_path=r"assets/tests/Teste.mp4",hashtags=["test","test2"])
         self.assertTrue(ret)
         self.assertIsNotNone(self.post_id)
-        # self.assertTrue(str(self.post_id).isdigit())
 
     def test_create_post_with_remote_video(self):
         #this is a simple post with video from web
         ret , self.post_id = self.fb.create_post(message="test video",
                             media_path="https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",hashtags=["test","test2"])
 
+    def test_create_post_with_video_local_wrong_path(self):
+        #this is a simple post with video from local
+        with self.assertRaises(AssertionError):
+            ret , self.post_id = self.fb.create_post(message="test",
+                                media_path=r"nonexisting.mp4",hashtags=["test","test2"]) 
+            
+
+    ######## GET POSTS ########
 
     def test_get_all_feed_posts(self):
         #create a post first 
@@ -176,6 +187,7 @@ class TestFacebook(unittest.TestCase):
             self.assertIn("message", ret[0])
             self.assertIn("id", ret[0])
 
+    ######## DELETE POSTS ########
     
     def test_delete_all_posts(self):
         #create a post
@@ -188,13 +200,15 @@ class TestFacebook(unittest.TestCase):
         for key, value in ret.items():
             self.assertTrue(value)
 
+    def test_delete_post(self):
+        #this is a simple post without media
+        ret , self.post_id = self.fb.create_post(message="Hello World")
+        self.assertTrue(ret)
+        self.assertIsNotNone(self.post_id)
+        #check if self.post_id contains only numbers
+        ret = self.fb.delete_post(self.post_id)
+        self.assertTrue(ret)
 
-    def test_create_post_with_video_local_wrong_path(self):
-        #this is a simple post with video from local
-        with self.assertRaises(AssertionError):
-            ret , self.post_id = self.fb.create_post(message="test",
-                                media_path=r"nonexisting.mp4",hashtags=["test","test2"]) 
-            
 
 if __name__ == '__main__':
     unittest.main()
