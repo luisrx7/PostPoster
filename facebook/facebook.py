@@ -3,6 +3,9 @@ from pyfacebook import GraphAPI
 from facebook.post.photo_post import Photo_post
 from facebook.post.video_post import Video_post
 from facebook.post.post import Post
+from facebook.storie.photo_storie import Photo_storie
+from facebook.storie.video_storie import Video_storie
+
 
 import os
 import time
@@ -17,7 +20,7 @@ class Facebook(SocialPlatform):
         self.api = GraphAPI(version="v18.0", app_secret=app_secret, app_id=app_id,access_token=access_token)
 
     
-    def create_post(self,message:str = "", media_path:str = "", scheduled_publish_time:int = 0, hashtags:list = [], link:str = ""):
+    def create_post(self,message:str = "", media_path:str = "", scheduled_publish_time:int = 0, hashtags:list = [], link:str = "",published:bool = True):
 
         # detect if the post is a photo or a video post
         # if it is a photo post, then create a photo post object
@@ -32,12 +35,15 @@ class Facebook(SocialPlatform):
 
         if media_path is not None and media_path != "":
             if media_path.endswith('.mp4'):
-                post = Video_post(message=message, link=link, media_path=media_path, scheduled_publish_time=scheduled_publish_time, hashtags=hashtags)
+                post = Video_post(message=message, link=link, media_path=media_path, 
+                                  scheduled_publish_time=scheduled_publish_time, hashtags=hashtags,published=published)
             else:
-                post = Photo_post(message=message, link=link, media_path=media_path, scheduled_publish_time=scheduled_publish_time, hashtags=hashtags)
+                post = Photo_post(message=message, link=link, media_path=media_path, 
+                                  scheduled_publish_time=scheduled_publish_time, hashtags=hashtags,published=published)
 
         else:
-            post = Post(message=message, link=link, media_path=media_path, scheduled_publish_time=scheduled_publish_time, hashtags=hashtags)
+            post = Post(message=message, link=link, media_path=media_path, 
+                        scheduled_publish_time=scheduled_publish_time, hashtags=hashtags,published=published)
 
         
         ret, post_id = post.publish(self.api, self.page_id)
@@ -93,4 +99,24 @@ class Facebook(SocialPlatform):
         return ret_val
     
 
+    def create_storie(self,media_path:str = ""):
+
+        #Photo Specifications
+        # Property	Specification
+        # File type
+
+        # .jpeg, .bmp, .png, .gif, .tiff
+
+        # File size
+
+        # Files can not exceed 4MB. For .png files, we recommend not exceeding 1MB or the image may appear pixelated.
+        if media_path.endswith('.jpeg') or media_path.endswith('.bmp') or \
+            media_path.endswith('.png') or media_path.endswith('.gif') or media_path.endswith('.tiff'):
+            storie = Photo_storie(media_path=media_path)
         
+        elif media_path.endswith('.mp4'):
+            storie = Video_storie(media_path=media_path)
+        # elif media_path.endswith('.mp4'):
+        #     storie = Video_storie(media_path=media_path)
+        ret, post_id = storie.publish(self.api, self.page_id)
+        return ret, post_id

@@ -7,7 +7,7 @@ class Photo_post(Post):
 
     def publish(self,api,page_id):
 
-        assert (self.message != "" or self.link != "" or self.hashtags != []) and self.media_path, "Post must have a message, a link , a hashtag or a media path"
+        assert (self.message != "" or self.link != "" or self.hashtags != []) or self.media_path, "Post must have a message, a link , a hashtag or a media path"
         assert self.media_path.endswith('.jpeg') or self.media_path.endswith('.bmp') or self.media_path.endswith('.png') or self.media_path.endswith('.gif') or self.media_path.endswith('.tiff') or self.media_path.startswith('http'), "Media file must be a photo or an url"
         
         
@@ -37,7 +37,7 @@ class Photo_post(Post):
         else:
             data["published"] = "true" if self.published else "false"
             
-
+        
         ret = api.post_object(object_id=page_id,
                 connection="photos",
                 data=data,

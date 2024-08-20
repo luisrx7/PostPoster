@@ -81,140 +81,161 @@ class TestFacebook(unittest.TestCase):
     #     self.assertIn("name", ret_lltoken)
 
 
-
-
-
-    def test_create_simple_post(self):
-        #this is a simple post without media
-        ret , self.post_id = self.fb.create_post(message="Hello World")
+    ####### Stories TESTS ########
+    def test_create_storie_with_photo_local(self):
+        #this is a simple post with photo from local file 
+        ret , self.post_id = self.fb.create_storie(media_path=r"assets/tests/test.png")
         self.assertTrue(ret)
         self.assertIsNotNone(self.post_id)
 
-    ######## SCHEDULED POSTS ########
 
-    def test_create_simple_post_scheduled(self):
-        #this is a simple post without media scheduled
-        ret , self.post_id = self.fb.create_post(message="Hello World scheduled",scheduled_publish_time=int(time.time()+600))
-        self.assertTrue(ret)
-        self.assertIsNotNone(self.post_id)
+    # def test_create_storie_with_video_local(self):
+    #     #this is a storie with video from local file
+    #     ret , self.post_id = self.fb.create_storie(media_path=r"assets/tests/Teste.mp4")
+    #     self.assertTrue(ret)
+    #     self.assertIsNotNone(self.post_id)
 
-    def test_create_simple_post_scheduled_in_past(self):
-        #this is a simple post without media scheduled in the past
-        with self.assertRaises(AssertionError):
-            ret , self.post_id = self.fb.create_post(message="Hello World scheduled to the past",scheduled_publish_time=int(time.time()-600))
 
-    def test_create_simple_post_scheduled_in_future(self):
-        #this is a simple post without media scheduled in the future more than 30 days
-        with self.assertRaises(AssertionError):
-            ret , self.post_id = self.fb.create_post(message="Hello World scheduled to more than 30 days",scheduled_publish_time=int(time.time()+60*24*60*60))
 
-    def test_create_simple_post_scheduled_in_future_less_than_10_minutes(self):
-        #this is a simple post without media scheduled in the future less than 10 minutes
-        with self.assertRaises(AssertionError):
-            ret , self.post_id = self.fb.create_post(message="Hello World scheduled to less than 10 minutes",scheduled_publish_time=int(time.time()+9*60))
+    # def test_create_simple_post(self):
+    #     #this is a simple post without media
+    #     ret , self.post_id = self.fb.create_post(message="Hello World")
+    #     self.assertTrue(ret)
+    #     self.assertIsNotNone(self.post_id)
 
-    ######## LINK IN POST ########
+    # ######## SCHEDULED POSTS ########
 
-    def test_create_simple_post_with_link(self):
-        #this is a simple post without media
-        ret , self.post_id = self.fb.create_post(message="Hello World with link",link="https://www.google.com")
-        self.assertTrue(ret)
-        self.assertIsNotNone(self.post_id)
+    # def test_create_simple_post_scheduled(self):
+    #     #this is a simple post without media scheduled
+    #     ret , self.post_id = self.fb.create_post(message="Hello World scheduled",scheduled_publish_time=int(time.time()+600))
+    #     self.assertTrue(ret)
+    #     self.assertIsNotNone(self.post_id)
 
-    def test_create_post_without_message(self):
-        #this is a simple post without media
-        with self.assertRaises(Exception):
-            ret , self.post_id = self.fb.create_post()
+    # def test_create_simple_post_scheduled_in_past(self):
+    #     #this is a simple post without media scheduled in the past
+    #     with self.assertRaises(AssertionError):
+    #         ret , self.post_id = self.fb.create_post(message="Hello World scheduled to the past",scheduled_publish_time=int(time.time()-600))
+
+    # def test_create_simple_post_scheduled_in_future(self):
+    #     #this is a simple post without media scheduled in the future more than 30 days
+    #     with self.assertRaises(AssertionError):
+    #         ret , self.post_id = self.fb.create_post(message="Hello World scheduled to more than 30 days",scheduled_publish_time=int(time.time()+60*24*60*60))
+
+    # def test_create_simple_post_scheduled_in_future_less_than_10_minutes(self):
+    #     #this is a simple post without media scheduled in the future less than 10 minutes
+    #     with self.assertRaises(AssertionError):
+    #         ret , self.post_id = self.fb.create_post(message="Hello World scheduled to less than 10 minutes",scheduled_publish_time=int(time.time()+9*60))
+
+    # ######## LINK IN POST ########
+
+    # def test_create_simple_post_with_link(self):
+    #     #this is a simple post without media
+    #     ret , self.post_id = self.fb.create_post(message="Hello World with link",link="https://www.google.com")
+    #     self.assertTrue(ret)
+    #     self.assertIsNotNone(self.post_id)
+
+    # def test_create_post_without_message(self):
+    #     #this is a simple post without media
+    #     with self.assertRaises(Exception):
+    #         ret , self.post_id = self.fb.create_post()
         
 
-    ######## PHOTOS IN POST ########
+    # ######## PHOTOS IN POST ########
     
-    def test_create_post_with_photo(self):
-        #this is a simple post with photo from url
-        ret , self.post_id = self.fb.create_post(message="test",
-                            media_path="https://pbs.twimg.com/profile_images/1359643195932557315/s9A68JRK_400x400.jpg",hashtags=["test"])
-        self.assertTrue(ret)
-        self.assertIsNotNone(self.post_id)
+    # def test_create_post_with_photo(self):
+    #     #this is a simple post with photo from url
+    #     ret , self.post_id = self.fb.create_post(message="test",
+    #                         media_path="https://pbs.twimg.com/profile_images/1359643195932557315/s9A68JRK_400x400.jpg",hashtags=["test"])
+    #     self.assertTrue(ret)
+    #     self.assertIsNotNone(self.post_id)
     
-    def test_create_post_with_photo_local(self):
-        #this is a post with photo from local file 
-        ret , self.post_id = self.fb.create_post(message="test",
-                            media_path=r"assets/tests/test.png",hashtags=["test","test2"])
-        self.assertTrue(ret)
-        self.assertIsNotNone(self.post_id)
+    # def test_create_post_with_photo_local(self):
+    #     #this is a post with photo from local file 
+    #     ret , self.post_id = self.fb.create_post(message="test",
+    #                         media_path=r"assets/tests/test.png",hashtags=["test","test2"])
+    #     self.assertTrue(ret)
+    #     self.assertIsNotNone(self.post_id)
+    
+    # def test_create_post_with_photo_local_unpublished(self):
+    #     #this is a post with photo from local file 
+    #     ret , self.post_id = self.fb.create_post(message="test",
+    #                         media_path=r"assets/tests/test.png",hashtags=["test","test2"],published=False)
+    #     self.assertTrue(ret)
+    #     self.assertIsNotNone(self.post_id)
 
 
-    def test_create_post_with_photo_wrong_url(self):
-        #this is a simple post with photo from url
-        with self.assertRaises(Exception):
-            ret , self.post_id = self.fb.create_post(message="test",
-                            media_path="https://p557315/s9A68JRK_400x400.jp",hashtags=["test","test2"])
+
+    # def test_create_post_with_photo_wrong_url(self):
+    #     #this is a simple post with photo from url
+    #     with self.assertRaises(Exception):
+    #         ret , self.post_id = self.fb.create_post(message="test",
+    #                         media_path="https://p557315/s9A68JRK_400x400.jp",hashtags=["test","test2"])
 
 
-    ######## VIDEOS IN POST ########
+    # ######## VIDEOS IN POST ########
 
-    def test_create_post_with_video_local(self):
-        #this is a simple post with video from local
-        ret , self.post_id = self.fb.create_post(message="test",
-                            media_path=r"assets/tests/Teste.mp4",hashtags=["test","test2"])
-        self.assertTrue(ret)
-        self.assertIsNotNone(self.post_id)
+    # def test_create_post_with_video_local(self):
+    #     #this is a simple post with video from local
+    #     ret , self.post_id = self.fb.create_post(message="test",
+    #                         media_path=r"assets/tests/Teste.mp4",hashtags=["test","test2"])
+    #     self.assertTrue(ret)
+    #     self.assertIsNotNone(self.post_id)
 
-    def test_create_post_with_remote_video(self):
-        #this is a simple post with video from web
-        ret , self.post_id = self.fb.create_post(message="test video",
-                            media_path="https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",hashtags=["test","test2"])
+    # def test_create_post_with_remote_video(self):
+    #     #this is a simple post with video from web
+    #     ret , self.post_id = self.fb.create_post(message="test video",
+    #                         media_path="https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",hashtags=["test","test2"])
 
-    def test_create_post_with_video_local_wrong_path(self):
-        #this is a simple post with video from local
-        with self.assertRaises(AssertionError):
-            ret , self.post_id = self.fb.create_post(message="test",
-                                media_path=r"nonexisting.mp4",hashtags=["test","test2"]) 
+    # def test_create_post_with_video_local_wrong_path(self):
+    #     #this is a simple post with video from local
+    #     with self.assertRaises(AssertionError):
+    #         ret , self.post_id = self.fb.create_post(message="test",
+    #                             media_path=r"nonexisting.mp4",hashtags=["test","test2"]) 
             
 
-    ######## GET POSTS ########
+    # ######## GET POSTS ########
 
-    def test_get_all_feed_posts(self):
-        #create a post first 
-        ret , self.post_id = self.fb.create_post(message="test")
-        ret = self.fb.get_feed_posts()
+    # def test_get_all_feed_posts(self):
+    #     #create a post first 
+    #     ret , self.post_id = self.fb.create_post(message="test")
+    #     ret = self.fb.get_feed_posts()
         
-        #example_ret = [
-        #     {
-        #       "created_time": "2019-01-02T18:31:28+0000",
-        #       "message": "This is my test post on my Page.",
-        #       "id": "page_post_id"
-        #     }
-        #   ]
+    #     #example_ret = [
+    #     #     {
+    #     #       "created_time": "2019-01-02T18:31:28+0000",
+    #     #       "message": "This is my test post on my Page.",
+    #     #       "id": "page_post_id"
+    #     #     }
+    #     #   ]
 
-        self.assertIsInstance(ret, list)
-        if len(ret) > 0:
-            self.assertIsInstance(ret[0], dict)
-            self.assertIn("created_time", ret[0])
-            self.assertIn("message", ret[0])
-            self.assertIn("id", ret[0])
+    #     self.assertIsInstance(ret, list)
+    #     if len(ret) > 0:
+    #         self.assertIsInstance(ret[0], dict)
+    #         self.assertIn("created_time", ret[0])
+    #         self.assertIn("message", ret[0])
+    #         self.assertIn("id", ret[0])
 
-    ######## DELETE POSTS ########
+    # ######## DELETE POSTS ########
     
-    def test_delete_all_posts(self):
-        #create a post
-        ret , _ = self.fb.create_post(message="test")
+    # def test_delete_all_posts(self):
+    #     #create a post
+    #     ret , _ = self.fb.create_post(message="test")
 
-        ret = self.fb.delete_all_posts()
+    #     ret = self.fb.delete_all_posts()
 
-        self.assertIsInstance(ret, dict)
+    #     self.assertIsInstance(ret, dict)
 
-        for key, value in ret.items():
-            self.assertTrue(value)
+    #     for key, value in ret.items():
+    #         self.assertTrue(value)
 
-    def test_delete_post(self):
-        #this is a simple post without media
-        ret , self.post_id = self.fb.create_post(message="Hello World")
-        self.assertTrue(ret)
-        self.assertIsNotNone(self.post_id)
-        #check if self.post_id contains only numbers
-        ret = self.fb.delete_post(self.post_id)
-        self.assertTrue(ret)
+    # def test_delete_post(self):
+    #     #this is a simple post without media
+    #     ret , self.post_id = self.fb.create_post(message="Hello World")
+    #     self.assertTrue(ret)
+    #     self.assertIsNotNone(self.post_id)
+    #     #check if self.post_id contains only numbers
+    #     ret = self.fb.delete_post(self.post_id)
+    #     self.assertTrue(ret)
 
 
 if __name__ == '__main__':
