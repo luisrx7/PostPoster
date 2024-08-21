@@ -78,4 +78,3 @@ Contributions are welcome! Please feel free to submit a Pull Request or open an 
 
 ---
 
-This improved README provides a clearer structure, adds more detail to the overview, and ensures consistency throughout. It also includes a "Getting Started" section to help new users quickly set up and use the tool.
